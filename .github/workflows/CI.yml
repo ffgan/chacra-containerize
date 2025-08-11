@@ -21,7 +21,7 @@ jobs:
 
     - name: docker compose up -d
       run: |
-        docker-compose up -d
+        docker compose up -d
         sleep 30
     
     - name: setup chacractl

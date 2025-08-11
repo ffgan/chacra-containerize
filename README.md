@@ -1,6 +1,10 @@
 ## 1. what's this
 
+Deploy chacra to a container.
 
+This is essentially done by following an Ansible script, using Docker Compose to start RabbitMQ and PostgreSQL. Then, run chacra and Nginx inside the container.
+
+It's in a pretty **raw** state right now, just enough to start and test chacra.
 
 
 ## 2. start

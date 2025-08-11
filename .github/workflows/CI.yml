@@ -15,6 +15,9 @@ jobs:
     - name: Build the Docker image
       working-directory: chacra_image
       run: docker build -t chacra .
+    
+    - name: Set up Docker Compose
+      uses: docker/setup-compose-action@v1
 
     - name: docker compose up -d
       run: |

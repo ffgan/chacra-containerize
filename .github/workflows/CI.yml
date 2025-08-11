@@ -44,6 +44,12 @@ jobs:
 
         rm -f ./ceph-libboost-atomic1.87-dev_1.87.0-1.1_amd64.deb
 
+        ls -l
+
+        wget  http://127.0.0.1/binaries/libboost/master/9ea1fb8bdad548a88004db87761f173aa50dcc85/ubuntu/jammy/amd64/flavors/default/ceph-libboost-atomic1.87-dev_1.87.0-1.1_amd64.deb
+
+        ls -l
+
     - name: clean
       run: |
         rm -f ./ceph-libboost-atomic1.87-dev_1.87.0-1.1_amd64.deb

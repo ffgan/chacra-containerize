@@ -22,7 +22,7 @@ jobs:
     - name: docker compose up -d
       run: |
         docker compose up -d
-        sleep 30
+        sleep 60
     
     - name: setup chacractl
       run: |

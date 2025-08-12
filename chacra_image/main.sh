@@ -13,6 +13,6 @@ ${APP_HOME}/bin/celery -A asynch beat --loglevel=info &
 
 
 sleep 10
-sudo bash ${APP_HOME}/init-chacra-app.sh
+sudo bash ${APP_HOME}/init-chacra-db.sh
 
 ${APP_HOME}/bin/gunicorn_pecan -w 10 -t 1200 ${APP_HOME}/src/${APP_NAME}/prod.py

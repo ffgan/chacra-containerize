@@ -36,6 +36,9 @@ jobs:
         ssl_verify = False
         EOF
 
+    - name: view container log
+      run:  docker logs --tail 1000 chacra-containerize-services-1 
+
     - name: test
       run: |
         wget https://chacra.ceph.com/r/libboost/master/9ea1fb8bdad548a88004db87761f173aa50dcc85/ubuntu/jammy/flavors/default/pool/main/b/boost1.87/ceph-libboost-atomic1.87-dev_1.87.0-1.1_amd64.deb

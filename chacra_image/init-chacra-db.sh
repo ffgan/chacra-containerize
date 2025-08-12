@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
+# env like APP_NAME,APP_HOME is pass by dockerfile
 echo "init chacra database..."
-
-APP_NAME="${APP_NAME:-chacra}"
-APP_HOME="${APP_HOME:-/opt/chacra}"
 
 psql -v ON_ERROR_STOP=1 -h 127.0.0.1 -p 5432 --username postgres --dbname postgres -tc \
     "SELECT 1 FROM pg_database WHERE datname = 'chacra'" | grep -q 1 || \

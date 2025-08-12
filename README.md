@@ -38,8 +38,8 @@ set below txt to ~/.chacractl
 # make sure to update it with the correct user and key to talk to the API
 
 url = "http://127.0.0.1/"
-user = "jack"
-key = "xxxxxx666666"
+user = "admin"
+key = "secret"
 ssl_verify = False
 ```
 
@@ -62,7 +62,10 @@ rm -f ./ceph-libboost-atomic1.87-dev_1.87.0-1.1_amd64.deb
 sudo docker compose down
 ```
 
-## 3. important warn
+## 3.  override conf without rebuild image
+please see compose.yml:50 .
+
+## 4. important warn
 1. **Please do not use it for prod.**
 
 2. **Just use it for test,after merge into chacra,this repo will be archive.**

@@ -1,5 +1,7 @@
 #! /bin/sh
 # env is pass by dockerfile
+echo $APP_NAME
+echo $APP_HOME
 cd ${APP_HOME}/src/${APP_NAME}/${APP_NAME}
 
 sleep 10

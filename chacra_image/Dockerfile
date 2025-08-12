@@ -1,13 +1,13 @@
 FROM ubuntu:20.04
 
 ARG APP_NAME="chacra"
-ARG APP_HOME="/opt/${APP_NAME}"
-
-ENV APP_HOME=${APP_HOME}
+# please do not pass env to container while start container.
+# those env is valid on build image,not run time.
 ENV APP_NAME=${APP_NAME}
+ENV APP_HOME="/opt/${APP_NAME}"
 ENV DEBIAN_FRONTEND=noninteractive
 
-# In Ubuntu 20.04, createrepo cannot be installed. In Ubuntu 22.04, we may be able to use createrepo-c instead of createrepo, but in Ubuntu 22.04, chacra has some Python problems. Since the current chacra works fine in Ubuntu 20.04, we'll just ignore createrepo for now.
+# In Ubuntu 20.04, createrepo cannot be installed. In Ubuntu 22.04, we may be able to use createrepo-c instead of createrepo, but in Ubuntu 22.04, chacra has some Python problems(install celery[librabbitmq] will crash). Since the current chacra works fine in Ubuntu 20.04, we'll just ignore createrepo for now.
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     sudo \
     git cmake libtool autoconf nginx reprepro \
-    && mkdir -p /var/log/celery /etc/supervisor/conf.d /etc/nginx/sites-available /etc/nginx/sites-enabled \
+    && mkdir -p /var/log/celery /etc/nginx/sites-available /etc/nginx/sites-enabled \
     && rm -f /etc/nginx/sites-enabled/default \
     && mkdir -p /var/lib/nginx/body /var/log/nginx \
     && useradd --system --no-create-home --shell /bin/false --user-group nginx \
@@ -32,17 +32,18 @@ RUN virtualenv ${APP_HOME} \
     && pip install -I -e git+https://github.com/ffgan/chacra@main#egg=chacra \
     && pip install librabbitmq && pip install -r  ${APP_HOME}/src/${APP_NAME}/requirements.txt
 
-COPY ./*.py ${APP_HOME}/src/${APP_NAME}/
+COPY ./main.sh /bin/main.sh
+COPY ./init-chacra-db.sh ${APP_HOME}/init-chacra-db.sh
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY ./nginx_site.conf /etc/nginx/sites-available/${APP_NAME}.conf
+COPY ./conf/*.py ${APP_HOME}/src/${APP_NAME}/
+COPY ./conf/alembic-prod.ini ${APP_HOME}/src/${APP_NAME}/alembic-prod.ini
+
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./conf/nginx_site.conf /etc/nginx/sites-available/${APP_NAME}.conf
 
 RUN ln -s /etc/nginx/sites-available/${APP_NAME}.conf  /etc/nginx/sites-enabled/${APP_NAME}.conf
 
 ENV PECAN_CONFIG=${APP_HOME}/src/${APP_NAME}/prod.py
 
-COPY ./main.sh /bin/main.sh
-COPY ./init-chacra-app.sh ${APP_HOME}/init-chacra-app.sh
-COPY ./alembic-prod.ini ${APP_HOME}/src/${APP_NAME}/alembic-prod.ini
 
 CMD ["/bin/sh","-c","/bin/main.sh"]

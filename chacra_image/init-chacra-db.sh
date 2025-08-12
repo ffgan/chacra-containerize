@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # env like APP_NAME,APP_HOME is pass by dockerfile
+echo $APP_NAME
+echo $APP_HOME
 echo "init chacra database..."
 
 psql -v ON_ERROR_STOP=1 -h 127.0.0.1 -p 5432 --username postgres --dbname postgres -tc \
@@ -17,12 +19,12 @@ DATABASE_CHECK_RC=$?
 echo "check result: code=$DATABASE_CHECK_RC"
 
 if [ $DATABASE_CHECK_RC -ne 0 ] || [ "$res" = "0" ]; then
-    echo "need to fill data for $APP_NAME..."
+    echo "need to fill data for ${APP_NAME}..."
     
-    if [ -f "$APP_HOME/bin/pecan" ] && [ -f "$APP_HOME/src/$APP_NAME/prod.py" ]; then
+    if [ -f "${APP_HOME}/bin/pecan" ] && [ -f "${APP_HOME}/src/${APP_NAME}/prod.py" ]; then
         echo "fill data is started..."
-        export ALEMBIC_CONFIG="$APP_HOME/src/$APP_NAME/alembic-prod.ini"
-        if $APP_HOME/bin/pecan populate $APP_HOME/src/$APP_NAME/prod.py; then
+        export ALEMBIC_CONFIG="${APP_HOME}/src/${APP_NAME}/alembic-prod.ini"
+        if ${APP_HOME}/bin/pecan populate ${APP_HOME}/src/${APP_NAME}/prod.py; then
             echo "fill data done"
         else
             echo "warn: fill ddta fail,but start container continue"
